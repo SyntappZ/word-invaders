@@ -33,7 +33,7 @@ function preload() {
 function setup() {
   angleMode(DEGREES);
   imageMode(CENTER);
-
+  masterVolume(0.4)
   createCanvas(windowWidth, windowHeight);
   shipY = height - 300;
   shipX = width / 2;
@@ -48,9 +48,12 @@ function setup() {
 function draw() {
   clear();
 
-  for (let i = 0; i < lasers.length; i++) {
-    lasers[i].shoot();
-  }
+  lasers.forEach(laser => {
+    laser.shoot();
+
+  })
+
+ 
 
   myShip.show();
   if (gameStarted) {
