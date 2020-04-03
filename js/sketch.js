@@ -15,6 +15,7 @@ let angle = 90;
 let radius = 70;
 let gameStarted = false;
 let lasers = [];
+let rotation = 0;
 let myExhausts = [
   "images/myShip/Exhaust/image1.png",
   "images/myShip/Exhaust/image2.png",
@@ -42,7 +43,7 @@ function setup() {
 
   shipAxisPoint = createVector(shipX - radius, shipY);
   //  menuMusic.play()
-  myShip = new Ship(shipX, shipY, radius, radius, 0, shipAxisPoint);
+  myShip = new Ship(shipX, shipY, radius, radius, shipAxisPoint);
 }
 
 function draw() {
@@ -50,12 +51,13 @@ function draw() {
 
   lasers.forEach(laser => {
     laser.shoot();
-    laser.rotate(30)
+    // laser.rotate(rotation)
   })
 
- myShip.rotate(30)
+  //  myShip.rotate(rotation)
 
   myShip.show();
+  myShip.turn()
   if (gameStarted) {
     myShip.startPosition();
     // menuMusic.pause();
@@ -76,10 +78,27 @@ function startGame() {
 function mousePressed() {
   if (gameStarted) {
     laserSound.play()
-    let laser = new Laser(axisX, height - 100);
+    let laser = new Laser(myShip.pos, myShip.heading);
     lasers.push(laser);
   }
   
+}
+
+function keyReleased() {
+  myShip.setRotation(0)
+}
+
+
+function keyPressed() {
+  if(keyCode === LEFT_ARROW) {
+    console.log('left')
+    myShip.setRotation(-1)
+  }
+  if(keyCode === RIGHT_ARROW) {
+    console.log('right')
+    myShip.setRotation(1)
+
+  }
 }
 
 // const rotator = () => {

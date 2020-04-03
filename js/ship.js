@@ -1,22 +1,23 @@
 class Ship {
-  constructor(x, y, w, h, rotate, shipAxis) {
-    this.shipX = x;
-    this.shipY = y;
+  constructor(x, y, w, h, shipAxis) {
+    this.pos = createVector(x, y)
     this.width = w;
     this.height = h;
     this.speed = -15;
     this.index = 0;
     this.exhaustSpeed = 0.3;
-    this.exhaustRotation = -90;
-    this.shipRotation = rotate;
+    
+    
     this.axisPoint = shipAxis;
+    this.heading = 0;
+    this.rotation = 0;
   }
 
   show() {
     
   
-     translate(this.shipX,  this.shipY);
-     rotate(this.shipRotation, this.axisPoint);
+     translate(this.pos.x,  this.pos.y);
+     rotate(this.heading, this.axisPoint);
      image(myShipImage, 0, 0, this.width, this.height);
     // fill(255)
     // ellipse(0, this.height / 2, 55, 55);
@@ -32,17 +33,19 @@ class Ship {
 
  
   startPosition() {
-    this.shipY += this.speed;
+    this.pos.y += this.speed;
     this.speed++;
-    if (this.shipY >= height - 100) {
+    if (this.pos.y >= height - 100) {
       this.speed = 0;
     }
   }
   
+  setRotation(turn) {
+    this.rotation = turn
+  }
 
-
-  rotate(turn) {
-    this.shipRotation = turn
+  turn() {
+    this.heading += this.rotation
 
   }
 }
