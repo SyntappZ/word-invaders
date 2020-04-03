@@ -50,10 +50,10 @@ function draw() {
 
   lasers.forEach(laser => {
     laser.shoot();
-
+    laser.rotate(30)
   })
 
- 
+ myShip.rotate(30)
 
   myShip.show();
   if (gameStarted) {
