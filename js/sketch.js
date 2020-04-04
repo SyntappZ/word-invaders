@@ -50,6 +50,7 @@ function draw() {
   clear();
 
   lasers.forEach(laser => {
+    laser.update()
     laser.shoot();
     // laser.rotate(rotation)
   })
@@ -78,6 +79,7 @@ function startGame() {
 function mousePressed() {
   if (gameStarted) {
     laserSound.play()
+    console.log(myShip.heading)
     let laser = new Laser(myShip.pos, myShip.heading);
     lasers.push(laser);
   }

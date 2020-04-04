@@ -14,10 +14,10 @@ class Ship {
   }
 
   show() {
-    
+   
   
      translate(this.pos.x,  this.pos.y);
-     rotate(this.heading, this.axisPoint);
+     rotate(this.heading);
      image(myShipImage, 0, 0, this.width, this.height);
     // fill(255)
     // ellipse(0, this.height / 2, 55, 55);
@@ -41,11 +41,17 @@ class Ship {
   }
   
   setRotation(turn) {
-    this.rotation = turn
+  
+      this.rotation = turn
+     
+    
   }
 
   turn() {
+    if(this.heading <= 90 && this.heading >= -90) { 
     this.heading += this.rotation
+        
+    }
 
   }
 }
