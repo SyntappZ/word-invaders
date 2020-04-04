@@ -1,5 +1,6 @@
 let myShipImage,
   laser,
+  font,
   laserImage,
   laserSound,
   menuMusic,
@@ -9,8 +10,15 @@ let myShipImage,
   shipX,
   axisX,
   axisY,
-  shipAxisPoint;
+  shipAxisPoint,
+  currentWord;
 
+let enemyShips = [];
+let words = [];
+let level = 1;
+let type = "words";
+let currentList = [];
+let wordAmount = 3 + level;
 let angle = 90;
 let radius = 70;
 let gameStarted = false;
@@ -20,21 +28,23 @@ let myExhausts = [
   "images/myShip/Exhaust/image1.png",
   "images/myShip/Exhaust/image2.png",
   "images/myShip/Exhaust/image3.png",
-  "images/myShip/Exhaust/image4.png"
+  "images/myShip/Exhaust/image4.png",
 ];
 
 function preload() {
   myShipImage = loadImage("images/myShip/ship.png");
+  enemyShipImage = loadImage('images/enemyShips/Ship2.png')
+  myExhausts = myExhausts.map((img) => loadImage(img));
   laserImage = loadImage("images/laser.png");
   laserSound = loadSound("sounds/laser.mp3");
-  menuMusic = loadSound("sounds/menuMusic.ogg")
-  myExhausts = myExhausts.map(img => loadImage(img));
+  menuMusic = loadSound("sounds/menuMusic.ogg");
+  font = loadFont("fonts/Baloo_Chettan_2/BalooChettan2-Medium.ttf");
 }
 
 function setup() {
   angleMode(DEGREES);
   imageMode(CENTER);
-  masterVolume(0.4)
+  masterVolume(0.4);
   createCanvas(windowWidth, windowHeight);
   shipY = height - 300;
   shipX = width / 2;
@@ -49,18 +59,29 @@ function setup() {
 function draw() {
   clear();
 
-  lasers.forEach(laser => {
-    laser.update()
+  lasers.forEach((laser) => {
+    laser.update();
     laser.shoot();
     // laser.rotate(rotation)
-  })
+  });
 
   //  myShip.rotate(rotation)
 
   myShip.show();
-  myShip.turn()
+  myShip.turn();
   if (gameStarted) {
     myShip.startPosition();
+
+    enemyShips.forEach((ship) => {
+      ship.show();
+      ship.fall();
+    });
+
+    words.forEach((word) => {
+      word.show();
+      word.fall();
+    });
+
     // menuMusic.pause();
   }
 }
@@ -78,29 +99,71 @@ function startGame() {
 
 function mousePressed() {
   if (gameStarted) {
-    laserSound.play()
-    console.log(myShip.heading)
-    let laser = new Laser(myShip.pos, myShip.heading);
+    // console.log(myShip.heading);
+    let laser = new Laser(myShip.pos, myShip.heading + 90);
     lasers.push(laser);
+    loadWords();
   }
-  
 }
 
 function keyReleased() {
-  myShip.setRotation(0)
+  myShip.setRotation(0);
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    myShip.setRotation(-1);
+  }
+  if (keyCode === RIGHT_ARROW) {
+    myShip.setRotation(1);
+  }
+
+  currentList.forEach((word, i) => {
+    let firstLetter = word[0]
+    if(key === firstLetter && !currentWord) { 
+      currentWord = words[i]
+      
+    }
+  
+  });
+
+  if(currentWord) {
+    wordRemover(currentWord, key)
+  }
+ 
+}
+
+function loadWords() {
+  words = []
+  enemyShips = []
+  
+  currentList = randomWords(type)
+
+  for (let i = 0; i < wordAmount; i++) {
+    let x = random(20, width - 20);
+    let y = random(-400, 0);
+    let ship = new EnemyShip(x, y, i);
+    let word = new Word(ship.pos, currentList[i], ship.speed, i);
+    words.push(word);
+    enemyShips.push(ship);
+  }
+  level++;
 }
 
 
-function keyPressed() {
-  if(keyCode === LEFT_ARROW) {
-    console.log('left')
-    myShip.setRotation(-1)
-  }
-  if(keyCode === RIGHT_ARROW) {
-    console.log('right')
-    myShip.setRotation(1)
+function wordRemover(word, key) {
+ word.fontColor = color(14, 108, 88);
+ word.background = color(0,0,0, 200);
 
-  }
+ 
+if(key === word.word[0]) {
+  word.word = word.word.slice(1)
+}
+if(word.word.length < 1) {
+  currentWord = null
+  return
+}
+ 
 }
 
 // const rotator = () => {
@@ -127,3 +190,11 @@ function keyPressed() {
 
 //   //  myShip.rotate(r)
 // };
+
+// const fetchWords = async () => {
+//   const url = ''
+//   const response = await fetch(url)
+//   const data = await response.json()
+//   console.log(data)
+
+// }
