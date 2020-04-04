@@ -16,7 +16,7 @@ class Laser {
     }
 
     shoot() {
-        // laserSound.play();
+        
         push()
         translate(this.pos.x,  this.pos.y);
         image(laserImage, 0,0, this.w, this.h);
