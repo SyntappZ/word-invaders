@@ -27,11 +27,37 @@ let myExhausts = [
   "images/myShip/Exhaust/image3.png",
   "images/myShip/Exhaust/image4.png",
 ];
+let enemyExplosion = [
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_000.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_004.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_005.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_008.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_009.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_010.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_013.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_014.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_015.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_016.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_019.png",
+  "images/enemyShips/Ship2_Explosion/Ship2_Explosion_021.png",
+];
+
+let hitExplosion = [
+  "images/enemyShips/hitExplosion/shot4_exp2.png",
+  "images/enemyShips/hitExplosion/shot4_exp3.png",
+  "images/enemyShips/hitExplosion/shot4_exp4.png",
+  "images/enemyShips/hitExplosion/shot4_exp5.png",
+  "images/enemyShips/hitExplosion/shot4_exp6.png",
+  "images/enemyShips/hitExplosion/shot4_exp7.png",
+  "images/enemyShips/hitExplosion/shot4_exp8.png",
+];
 
 function preload() {
   myShipImage = loadImage("images/myShip/ship.png");
   enemyShipImage = loadImage("images/enemyShips/Ship2.png");
   myExhausts = myExhausts.map((img) => loadImage(img));
+  enemyExplosion = enemyExplosion.map((img) => loadImage(img));
+  hitExplosion = hitExplosion.map((img) => loadImage(img));
   laserImage = loadImage("images/laser.png");
   laserSound = loadSound("sounds/laser.mp3");
   wrongLetterSound = loadSound("sounds/click.mp3");
@@ -44,34 +70,32 @@ function setup() {
   imageMode(CENTER);
   masterVolume(0.4);
   createCanvas(windowWidth, windowHeight);
-
+  myShip = new Ship(width / 2, height - 300, radius, radius);
 
   //  menuMusic.play()
-  myShip = new Ship(width / 2, height - 300, radius, radius);
 }
 
 function draw() {
   clear();
- 
+
   lasers.forEach((laser) => {
     laser.show();
 
     laser.shoot(currentShipTarget);
     // myShip.turn(laser.angle);
-  
   });
 
   //  myShip.rotate(rotation)
 
   myShip.show();
-  
+
   if (gameStarted) {
     myShip.startPosition();
 
     enemyShips.forEach((ship) => {
       ship.show();
       ship.fall();
-      ship.collisionDetection(lasers) 
+      ship.collisionDetection(lasers);
     });
 
     words.forEach((word) => {
@@ -152,6 +176,28 @@ function loadWave() {
   }
   wave++;
 }
+
+function collisionDetection(arr) {
+  if (currentShipTarget) {
+    // arr.forEach((laser, i) => {
+    //   let dist = currentShipTarget.dist(laser.pos);
+    //   if (dist < 5) {
+    //     arr.splice(i, 1);
+    //   }
+    //   laserHit()
+    // });
+  }
+}
+
+// function laserHit() {
+//   let i = 0, animationSpeed = 0.1
+//     let index = floor(i) % hitExplosion.length;
+
+//     image(hitExplosion[index], currentShipTarget.x, currentShipTarget.y, 80, 80);
+
+//     i += animationSpeed;
+
+// }
 
 // const rotator = () => {
 //   // let rad = mouseX
